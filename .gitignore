@@ -1,7 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Kotlin template
 # Compiled class file
-*.class
 
 # Log file
 *.log
@@ -39,3 +38,5 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+.idea/
+out/
