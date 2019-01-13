@@ -16,7 +16,6 @@ class PathSearch(private val obstacleTree: ObstacleTree) {
         var currentNode: Node
         do {
             currentNode = queue.remove()
-                .also { println(it.vertex) }
             visited.add(currentNode.vertex)
             neighbors(currentNode.vertex)
                 .asSequence()

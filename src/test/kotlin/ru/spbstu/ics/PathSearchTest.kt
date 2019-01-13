@@ -7,9 +7,9 @@ import kotlin.test.assertTrue
 
 object PathSearchTest : Spek({
     val obstacleTree = ObstacleTree()
-    val obstacleAmount = 100
+    val obstacleAmount = 1000
     val start = Vertex(0f, 0f)
-    val finish = Vertex(150f, 150f)
+    val finish = Vertex(1050f, 1050f)
     val pathSearch = PathSearch(obstacleTree)
 
     describe("A path searching algorithm") {
