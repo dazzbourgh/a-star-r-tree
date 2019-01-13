@@ -7,13 +7,20 @@ import kotlin.test.assertTrue
 
 object PathSearchTest : Spek({
     val obstacleTree = ObstacleTree()
-    val obstacleAmount = 1000
+    val obstacleAmount = 2000
     val start = Vertex(0f, 0f)
-    val finish = Vertex(1050f, 1050f)
+    val finish = Vertex(2050f, 2050f)
     val pathSearch = PathSearch(obstacleTree)
 
     describe("A path searching algorithm") {
-        initTree(obstacleAmount, obstacleTree)
+        measureTimeMillis { initTree(obstacleAmount, obstacleTree) }
+            .also {
+                println(
+                    """
+                Tree initialization time: $it ms
+            """.trimIndent()
+                )
+            }
         describe("searching path") {
             it("should find a path") {
                 measureTimeMillis {
@@ -24,7 +31,7 @@ object PathSearchTest : Spek({
                 }.also {
                     println(
                         """
-                    Execution time: $it ms
+                    Search time: $it ms
                     """.trimIndent()
                     )
                 }
