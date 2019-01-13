@@ -1,23 +1,44 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.11'
+buildscript {
+    ext.kotlin_version = '1.3.11'
+    ext.spek_version = '2.0.0-rc.1'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
-group 'ru.spbstu.ics'
-version '1.0-SNAPSHOT'
+apply plugin: 'kotlin'
+
+
+sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    jcenter()
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'spek2'
+    }
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'org.spf4j', name: 'spf4j-core', version: '8.5.25'
-    testCompile 'junit:junit:4.12'
+    // assertion
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    //spek2
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
+    testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:$spek_version"
 }
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

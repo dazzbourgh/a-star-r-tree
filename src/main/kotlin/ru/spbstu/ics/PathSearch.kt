@@ -2,27 +2,28 @@ package ru.spbstu.ics
 
 import java.util.PriorityQueue
 import java.util.Stack
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 class PathSearch(private val obstacleTree: ObstacleTree) {
     fun search(start: Vertex, finish: Vertex): List<Vertex> {
         val queue = PriorityQueue<Node>(compareBy { node ->
-            sqrt(node.vertex.y * node.vertex.y + node.vertex.x * node.vertex.x)
+            sqrt((node.vertex.y - finish.y).pow(2) + (node.vertex.x - finish.x).pow(2))
         })
-        val visited = mutableSetOf<Node>()
-
-        neighbors(start)
-            .map { Node(it, Node(start, null)) }
-            .also { queue.addAll(it) }
+        queue.add(Node(start, null))
+        val visited = mutableSetOf<Vertex>()
 
         var currentNode: Node
         do {
             currentNode = queue.remove()
-            visited.add(currentNode)
+                .also { println(it.vertex) }
+            visited.add(currentNode.vertex)
             neighbors(currentNode.vertex)
                 .asSequence()
                 .map { Node(it, currentNode) }
-                .filter { !visited.contains(it) }
+                .filter { !visited.contains(it.vertex) }
+                .filter { !obstacleTree.intersects(it.vertex) }
+                .also { queue.addAll(it) }
         } while (currentNode.vertex != finish)
         return currentNode.route()
     }
@@ -38,6 +39,7 @@ private fun neighbors(vertex: Vertex): List<Vertex> {
     return yList.flatMap { y ->
         xList.map { Vertex(it, y) }
     }
+        .filter { it.x >= 0 && it.y >= 0 }
 }
 
 private data class Node(val vertex: Vertex, val prev: Node?)
@@ -49,5 +51,5 @@ private fun Node.route(): List<Vertex> {
         path.add(currentNode.vertex)
         currentNode = currentNode.prev
     }
-    return path
+    return path.asReversed()
 }
