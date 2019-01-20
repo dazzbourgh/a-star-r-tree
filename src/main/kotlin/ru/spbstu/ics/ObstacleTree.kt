@@ -18,7 +18,7 @@ class ObstacleTree {
     }
 
     fun intersects(vertex: Vertex): Boolean {
-        val bottomLeftCoords = floatArrayOf(vertex.y, vertex.x)
+        val bottomLeftCoords = floatArrayOf(vertex.y.toFloat(), vertex.x.toFloat())
         val dimensions = floatArrayOf(0f, 0f)
         return !rTree.search(bottomLeftCoords, dimensions).isEmpty()
     }
@@ -32,8 +32,8 @@ private fun getDimensions(bottomLeft: FloatArray, topRight: FloatArray): FloatAr
 }
 
 private fun getCorner(obstacle: Obstacle, bottom: Boolean): FloatArray {
-    val y = getMinValue(obstacle, bottom) { it.y }
-    val x = getMinValue(obstacle, bottom) { it.x }
+    val y = getMinValue(obstacle, bottom) { it.y.toFloat() }
+    val x = getMinValue(obstacle, bottom) { it.x.toFloat() }
     val bottomLeft = FloatArray(2)
     bottomLeft[0] = y
     bottomLeft[1] = x
