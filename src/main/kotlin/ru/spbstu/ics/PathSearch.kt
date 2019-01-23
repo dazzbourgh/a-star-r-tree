@@ -7,9 +7,9 @@ import kotlin.math.sqrt
 
 fun search(start: Vertex, finish: Vertex, isObstacle: (v: Vertex) -> Boolean): List<Vertex> {
     val queue = PriorityQueue<Node>(compareBy { node ->
-        sqrt((node.vertex.y - finish.y).toFloat().pow(2) + (node.vertex.x - finish.x).toFloat().pow(2))
+        node.cost + node.prevCost
     })
-    queue.add(Node(start, null))
+    queue.add(Node(start, computeCost(start, finish)))
     val visited = mutableSetOf<Vertex>()
 
     var currentNode: Node
@@ -18,7 +18,14 @@ fun search(start: Vertex, finish: Vertex, isObstacle: (v: Vertex) -> Boolean): L
         visited.add(currentNode.vertex)
         neighbors(currentNode.vertex)
             .asSequence()
-            .map { Node(it, currentNode) }
+            .map {
+                Node(
+                    it,
+                    computeCost(it, finish),
+                    currentNode.cost,
+                    currentNode
+                )
+            }
             .filter { !visited.contains(it.vertex) }
             .filter { !isObstacle(it.vertex) }
             .also { queue.addAll(it) }
@@ -37,7 +44,12 @@ private fun neighbors(vertex: Vertex): List<Vertex> {
         .filter { it.x >= 0 && it.y >= 0 }
 }
 
-private data class Node(val vertex: Vertex, val prev: Node?)
+private data class Node(
+    val vertex: Vertex,
+    val cost: Float,
+    val prevCost: Float = 0f,
+    val prev: Node? = null
+)
 
 private fun Node.route(): List<Vertex> {
     val path = Stack<Vertex>()
@@ -47,4 +59,8 @@ private fun Node.route(): List<Vertex> {
         currentNode = currentNode.prev
     }
     return path.asReversed()
+}
+
+private fun computeCost(start: Vertex, finish: Vertex): Float {
+    return sqrt((start.y - finish.y).toFloat().pow(2) + (start.x - finish.x).toFloat().pow(2))
 }
