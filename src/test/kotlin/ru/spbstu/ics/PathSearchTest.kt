@@ -44,10 +44,11 @@ private fun testStructure(
     initialSize: Int,
     testFun: (Int) -> Pair<Long, Long>
 ) {
-    for (size in initialSize..initialSize * 100 step initialSize * 10) {
+    for (size in 0..initialSize * 100 step initialSize * 10) {
+        if (size == 0) continue
         println("Size: $size")
         val results = mutableListOf<Pair<Long, Long>>()
-        for (i in 0..99) {
+        for (i in 0 until 50) {
             testFun(size).also { results.add(it) }
         }
         val res = results.average()
